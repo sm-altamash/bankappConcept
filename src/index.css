@@ -9,67 +9,26 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-
     --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 37 36% 94%;
     --secondary-foreground: 240 5.9% 10%;
-
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-
     --accent: 37 36% 94%;
     --accent-foreground: 240 5.9% 10%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 221 83% 53%;
-
     --radius: 0.75rem;
   }
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 37 30% 86%;
-    --secondary-foreground: 240 5.9% 10%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 37 30% 86%;
-    --accent-foreground: 240 5.9% 10%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 221 83% 53%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
@@ -86,10 +45,24 @@
   
   .card-gradient {
     background: linear-gradient(135deg, #0052CC 0%, #4C9AFF 100%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 82, 204, 0.15);
   }
   
   .animate-in {
     animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .animate-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .animate-hover:hover {
+    transform: translateY(-2px);
   }
   
   @keyframes fadeIn {
@@ -102,6 +75,29 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .slide-in {
+    animation: slideIn 0.5s ease-out forwards;
+  }
+  
+  .glass-effect {
+    @apply bg-white/90 backdrop-blur-lg border border-white/20;
+  }
+  
+  .neo-brutalism {
+    @apply border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
   
   .scroll-hidden::-webkit-scrollbar {
     display: none;
@@ -110,5 +106,9 @@
   .scroll-hidden {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
   }
 }

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Card,
@@ -139,10 +138,22 @@ const Profile: React.FC = () => {
 
         <Button 
           variant="outline" 
-          className="w-full flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 animate-in fade-in-50 delay-200"
+          className="w-full flex items-center gap-2 
+            border-2 border-red-200/50 
+            text-red-600 
+            hover:bg-red-50/80 
+            hover:text-red-700 
+            transition-all duration-300 
+            ease-in-out 
+            animate-in fade-in-50 delay-200
+            backdrop-blur-sm 
+            shadow-sm 
+            hover:shadow-md 
+            rounded-xl 
+            py-3.5"
           onClick={handleLogout}
         >
-          <LogOut size={16} />
+          <LogOut size={18} strokeWidth={2.5} className="mr-2" />
           Sign Out
         </Button>
       </div>

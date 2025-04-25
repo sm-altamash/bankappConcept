@@ -1,18 +1,40 @@
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import NavBar from '@/components/navigation/nav-bar';
-import { ArrowRight, Bell, CreditCard, Lock, LogOut, Settings, Shield, User } from 'lucide-react';
+import {
+  User,
+  Shield,
+  Bell,
+  CreditCard,
+  Settings,
+  LogOut,
+  ArrowRight,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { PersonalInfo } from '@/components/profile/personal-info';
+import { SecuritySettings } from '@/components/profile/security-settings';
+import { NotificationPrefs } from '@/components/profile/notification-prefs';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [activeDialog, setActiveDialog] = useState<string | null>(null);
 
   const handleLogout = () => {
     toast({
@@ -27,19 +49,19 @@ const Profile: React.FC = () => {
       icon: <User className="h-5 w-5" />,
       title: 'Personal Information',
       subtitle: 'Update your details',
-      action: () => toast({ title: "Coming Soon", description: "This feature is under development." }),
+      action: () => setActiveDialog('personal'),
     },
     {
       icon: <Shield className="h-5 w-5" />,
       title: 'Security',
       subtitle: 'Manage your security preferences',
-      action: () => toast({ title: "Coming Soon", description: "This feature is under development." }),
+      action: () => setActiveDialog('security'),
     },
     {
       icon: <Bell className="h-5 w-5" />,
       title: 'Notifications',
       subtitle: 'Configure email and push notifications',
-      action: () => toast({ title: "Coming Soon", description: "This feature is under development." }),
+      action: () => setActiveDialog('notifications'),
       badge: 'New'
     },
     {
@@ -52,33 +74,35 @@ const Profile: React.FC = () => {
       icon: <Settings className="h-5 w-5" />,
       title: 'Preferences',
       subtitle: 'Language, currency and more',
-      action: () => toast({ title: "Coming Soon", description: "This feature is under development." }),
+      action: () => setActiveDialog('preferences'),
     },
   ];
 
   return (
     <div className="app-height bg-bank-light-gray pb-24">
       <header className="pt-12 pb-4 px-6">
-        <h1 className="text-2xl font-bold mb-1">Profile</h1>
-        <p className="text-muted-foreground">Manage your account</p>
+        <h1 className="text-2xl font-bold mb-1 animate-in slide-in-from-left">Profile</h1>
+        <p className="text-muted-foreground animate-in slide-in-from-left delay-100">Manage your account</p>
       </header>
 
       <div className="px-6 space-y-6">
-        <Card className="border-none shadow-sm bg-white overflow-hidden">
-          <div className="bg-bank-blue h-20"></div>
+        <Card className="border-none shadow-sm bg-white overflow-hidden animate-in fade-in-50">
+          <div className="bg-gradient-to-r from-bank-blue to-bank-light-blue h-20"></div>
           <div className="px-6 pb-6 -mt-12">
             <div className="flex flex-col items-center">
-              <Avatar className="h-24 w-24 border-4 border-white">
+              <Avatar className="h-24 w-24 border-4 border-white ring-2 ring-bank-blue/20 transition-transform hover:scale-105">
                 <AvatarFallback className="text-2xl bg-bank-black text-white">AJ</AvatarFallback>
               </Avatar>
               <h2 className="mt-4 text-xl font-bold">Alex Johnson</h2>
               <p className="text-muted-foreground">alex.johnson@example.com</p>
-              <Badge className="mt-2 bg-bank-beige text-bank-black hover:bg-bank-beige/80">Premium Member</Badge>
+              <Badge className="mt-2 bg-gradient-to-r from-bank-blue to-bank-light-blue text-white hover:from-bank-light-blue hover:to-bank-blue transition-all duration-300">
+                Premium Member
+              </Badge>
             </div>
           </div>
         </Card>
 
-        <Card className="border-none shadow-sm bg-white">
+        <Card className="border-none shadow-sm bg-white animate-in fade-in-50 delay-100">
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-medium">Account Settings</CardTitle>
           </CardHeader>
@@ -87,7 +111,7 @@ const Profile: React.FC = () => {
               {menuItems.map((item, index) => (
                 <button
                   key={index}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-muted/50 transition-colors"
+                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-muted/50 transition-all duration-300 hover:scale-[0.99]"
                   onClick={item.action}
                 >
                   <div className="flex items-center">
@@ -101,7 +125,9 @@ const Profile: React.FC = () => {
                   </div>
                   <div className="flex items-center">
                     {item.badge && (
-                      <Badge className="mr-2 bg-bank-blue text-white">{item.badge}</Badge>
+                      <Badge className="mr-2 bg-bank-blue text-white animate-pulse">
+                        {item.badge}
+                      </Badge>
                     )}
                     <ArrowRight size={16} className="text-muted-foreground" />
                   </div>
@@ -113,13 +139,31 @@ const Profile: React.FC = () => {
 
         <Button 
           variant="outline" 
-          className="w-full flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+          className="w-full flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 animate-in fade-in-50 delay-200"
           onClick={handleLogout}
         >
           <LogOut size={16} />
           Sign Out
         </Button>
       </div>
+      
+      <Dialog open={!!activeDialog} onOpenChange={() => setActiveDialog(null)}>
+        {activeDialog && (
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>
+                {activeDialog === 'personal' && 'Personal Information'}
+                {activeDialog === 'security' && 'Security Settings'}
+                {activeDialog === 'notifications' && 'Notification Preferences'}
+                {activeDialog === 'preferences' && 'App Preferences'}
+              </DialogTitle>
+            </DialogHeader>
+            {activeDialog === 'personal' && <PersonalInfo onClose={() => setActiveDialog(null)} />}
+            {activeDialog === 'security' && <SecuritySettings onClose={() => setActiveDialog(null)} />}
+            {activeDialog === 'notifications' && <NotificationPrefs onClose={() => setActiveDialog(null)} />}
+          </DialogContent>
+        )}
+      </Dialog>
       
       <NavBar />
     </div>
